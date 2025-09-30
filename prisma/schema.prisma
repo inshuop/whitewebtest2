@@ -1,0 +1,170 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model auth_User {
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  password   String
+  name       String
+  role       String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Project {
+  id              Int       @id @default(autoincrement())
+  title           String
+  description     String
+  location        String
+  client          String
+  contractor      String
+  consultant      String
+  scope           String
+  period          String
+  isIconicProject String
+  isCompleted     String
+  isOngoing       String
+  picture         String
+  divisionId      Int
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  division        Division  @relation(fields: [divisionId], references: [id])
+}
+
+model Blog {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  picture     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Division {
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String
+  picture     String
+  divisionUrl String
+  email       String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  teams       Team[]
+  partners    Partner[]
+  documents   Document[]
+  ccEmails    CcEmail[]
+  careers     Career[]
+  galaries    Gallery[]
+  products    Product[]
+  divisions   Project[]
+}
+
+model Team {
+  id          Int       @id @default(autoincrement())
+  name        String
+  designation String
+  experience  String
+  picture     String
+  divisionId  Int
+  division    Division  @relation(fields: [divisionId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model PartnerGroup {
+  id        Int       @id @default(autoincrement())
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  partners  Partner[]
+}
+
+model Partner {
+  id             Int          @id @default(autoincrement())
+  name           String
+  url            String
+  divisionId     Int
+  partnerGroupId Int
+  picture        String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  division       Division     @relation(fields: [divisionId], references: [id])
+  partnerGroup   PartnerGroup @relation(fields: [partnerGroupId], references: [id])
+}
+
+model Document {
+  id         Int      @id @default(autoincrement())
+  name       String
+  divisionId Int
+  pdfPath    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  division   Division @relation(fields: [divisionId], references: [id])
+}
+
+model CcEmail {
+  id         Int      @id @default(autoincrement())
+  email      String
+  divisionId Int
+  emailTo    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  division   Division @relation(fields: [divisionId], references: [id])
+}
+
+model Article {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  picture     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Gallery {
+  id         Int      @id @default(autoincrement())
+  name       String
+  divisionId Int
+  picture    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  division   Division @relation(fields: [divisionId], references: [id])
+}
+
+model Career {
+  id           Int      @id @default(autoincrement())
+  department   String
+  divisionId   Int
+  location     String
+  jobTitle     String
+  totalVacancy Int
+  jobType      String
+  gender       String
+  experience   String
+  detail       String
+  applyBy      DateTime
+  status       String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  division     Division @relation(fields: [divisionId], references: [id])
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  title       String
+  pictures    String
+  divisionId  Int
+  phone       String
+  email       String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  division    Division @relation(fields: [divisionId], references: [id])
+}
