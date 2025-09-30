@@ -4,12 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "analyze": "ANALYZE=true next build",
     "create-user": "ts-node --esm prisma/createUser.ts",
-    "export": "next export"
+    "export": "next export",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@emotion/react": "^11.13.5",
